@@ -1,9 +1,7 @@
 # springboot 异常处理
-## 关键字
-- 全局异常
-- 自定义异常
-- 自定义异常信息内容
+> 关键字、 全局异常 、自定义异常 、自定义异常信息内容
 ## 1、自定义异常类
+
 ```java
 package com.example.learning.common.exception;
 
@@ -44,6 +42,7 @@ public class LearningException extends RuntimeException {
 }
 ```
 ## 2、定义异常处理handler
+
 ```java
 package com.example.learning.common.exception;
 
@@ -98,6 +97,7 @@ public class BaseExceptionHandler {
 }
 ```
 ## 3、添加配置
+
 ```yaml
 # 定义资源文件，多个资源文件使用逗号进行分割
 spring:
