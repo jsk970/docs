@@ -1,4 +1,3 @@
 <!-- _navbar.md -->
 
-- [En](/)
-- [中文](/zh-cn/)
+- [笔记仓库](https://gitee.com/jsk970/docs)
