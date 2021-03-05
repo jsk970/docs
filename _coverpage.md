@@ -17,5 +17,5 @@
 
 <!-- ![color](#f0f0f0) -->
 
-[Gitee]()
+[Gitee](https://gitee.com/jsk970/docs)
 [Get Started](README.md)
