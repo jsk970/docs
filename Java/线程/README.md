@@ -2,6 +2,7 @@
 ## 1、线程的创建方式
 
 - 集成Thread类
+
 ```java
 package com.example.learning.thread;
 
@@ -43,7 +44,9 @@ public class MyThread extends Thread {
     }
 }
 ```
+
 - 实现Runnable接口
+
 ```java
 package com.example.learning.thread;
 
@@ -73,7 +76,9 @@ public class MyThread2 implements Runnable {
     }
 }
 ```
+
 - 实现Callable接口
+
 ```java
 package com.example.learning.thread;
 
@@ -124,7 +129,9 @@ public class MyThread3{
     }
 }
 ```
+
 ## 线程池
+
 ```Java
 package com.example.learning.thread;
 
@@ -161,6 +168,7 @@ public class MyThreadPool {
     }
 }
 ```
+
 - 使用阿里推荐的方式：ThreadPoolExecutor 创建线程池
 > 【强制】线程池不允许使用 Executors 去创建，而是通过 ThreadPoolExecutor 的方式，这样
   的处理方式让写的同学更加明确线程池的运行规则，规避资源耗尽的风险。
@@ -221,8 +229,8 @@ public class MyThreadPool2 {
         });
     }
 }
-
 ```
+
 # 线程的生命周期
 ![线程的生命周期示意图](线程的生命周期示意图.jpg)
 # 线程终止的4种方式
@@ -232,5 +240,3 @@ public class MyThreadPool2 {
    运行，只有在外部某些条件满足的情况下，才能关闭这些线程。使用一个变量来控制循环，例如：
    最直接的方法就是设一个 boolean 类型的标志，并通过设置这个标志为 true 或 false 来控制 while
    循环是否退出，代码示例：
-   ```java
-```
