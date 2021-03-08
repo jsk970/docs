@@ -2,6 +2,8 @@
 - [**总览**](README.md)
 
 - **Java**
+  - [Jvm 内存管理](Java/jvm/java内存管理/jvm内存管理机制.md)
+  - [类加载机制](Java/类加载/类加载.md)
   - [线程](Java/线程/README.md)
 
 - **中间件**
