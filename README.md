@@ -30,7 +30,7 @@
 
 ## 数据库
 - [数据库设计三范式](DataBase/Mysql/READNE.md)
-- [Redis主从赋值](DataBase/redis/redis主从赋值/README.md)
+- [Redis主从](DataBase/redis/redis主从/README.md)
 
 ## 排错总结
 - [excel导出报错：The supplied data appears to be in the Office 2007+ XML.](排错总结/excel导出报错.md)
