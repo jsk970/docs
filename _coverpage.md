@@ -1,6 +1,6 @@
 <!-- _coverpage.md 封面 -->
 
-<!-- ![logo](_media/icon.svg) -->
+ ![logo](images/logo.png)
 
 # Java经验仓
 
