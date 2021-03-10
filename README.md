@@ -5,8 +5,14 @@
 - [类加载机制](Java/类加载/类加载.md)
 - [线程](Java/线程/README.md)
 
+## 持久层框架
+- [Mybatis](持久层框架/Mybatis/README.md)
+- [Spring Data Jpa](持久层框架/SpringDataJpa/README.md)
+
+
 ## 中间件
 - [RabbitMq](中间件/rabbitmq/rabbitmq.md)
+
 
 ## Linux
 - [JavaWeb环境搭建](Linux/JavaWeb环境搭建/README.md)
@@ -38,6 +44,7 @@
 ## 排错总结
 - [excel导出报错：The supplied data appears to be in the Office 2007+ XML.](排错总结/excel导出报错.md)
 - [REST出现其任何超类对此上下文都是未知的](排错总结/REST出现其任何超类对此上下文都是未知的.md)
+- [spring boot使用fastJson(解决中文乱码问题)](排错总结/springboot使用fastJson(解决中文乱码问题).md)
 
 ## 项目管理工具
 - [maven 安装jar到本地仓库](项目管理工具/Maven/README.md)
