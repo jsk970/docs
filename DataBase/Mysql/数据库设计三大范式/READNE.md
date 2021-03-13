@@ -3,6 +3,7 @@
 ## 第一范式 1NF
   - 确保每个字段保持原子性，不可分割。
   >对于用户表 users 来说，有用户姓名（一般由 first_name 和 last_name 组成），如果使用类似 Oracle 的复合数据类型，就违反了 1NF。很明显 users 的字段 user_name 是一个自定类型，是可分解的，这就违反了 1NF。
+  
   > ![1NF](1NF.png)
 
 ## 第二范式 2NF
