@@ -40,7 +40,9 @@
 
 - **数据库**
   - [数据库设计三范式](DataBase/Mysql/数据库设计三大范式/READNE.md)
-  - [数据库事务的四大特性及事务的隔离级别](DataBase/Mysql/数据库事务的四大特性及事务的隔离级别/README.md)  
+  - [Mysql数据库事务的四大特性及事务的隔离级别](DataBase/Mysql/数据库事务的四大特性及事务的隔离级别/README.md)  
+  - [Mysql索引](DataBase/Mysql/Mysql索引/README.md)
+  - [Mysql语句执行流程](DataBase/Mysql/Mysql语句执行流程/README.md)
   - [Redis主从](DataBase/redis/redis主从/README.md)
 
 
@@ -56,6 +58,11 @@
 
 - **原理知识类**
   - [BTree & B+Tree](原理知识类/BTree&B+Tree/BTree&B+Tree.md)
+
+
+- **面试题**
+  -[equals和==的区别](面试题/equals和==的区别.md)
+  -[ArrayList的扩容机制](面试题/ArrayList的扩容机制.md)
 
 
 - **赞赏**
