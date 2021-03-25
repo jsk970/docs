@@ -56,8 +56,11 @@
 - [BTree & B+Tree](原理知识类/BTree&B+Tree/BTree&B+Tree.md)
 
 ## 面试题
--[equals和==的区别](面试题/equals和==的区别.md)
--[ArrayList的扩容机制](面试题/ArrayList的扩容机制.md)
+- [equals和==的区别](面试题/equals和==的区别.md)
+- [ArrayList的扩容机制](面试题/ArrayList的扩容机制.md)
+- [HashCode的作用](面试题/HashCode的作用.md)
+- [HashMap和HashTable的区别](面试题/HashMap和HashTable的区别.md)
+
 
 ## 赞赏
 如果觉得本仓库对您有帮助的话，希望朋友能够给博主喝一杯咖啡(*^▽^*)
