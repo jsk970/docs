@@ -56,7 +56,7 @@
 
 
 - **项目管理工具**
-  - [maven 安装jar到本地仓库](项目管理工具/Maven/README.md)
+  - [maven](项目管理工具/Maven/README.md)
 
 
 - **原理知识类**
