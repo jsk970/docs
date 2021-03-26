@@ -27,7 +27,7 @@
 
 - **Spring Boot**
   - [Spring Boot自定义全局异常](SpringBoot/SpringBoot自定义全局异常/README.md)
-  
+  - [Spring Boot全注解](SpringBoot/SpringBoot全注解/README.md)
 
 - **Spring Cloud**
   - [Eureka](SpringCloud/eureka/eureka.md)
@@ -68,5 +68,8 @@
   - [ArrayList的扩容机制](面试题/ArrayList的扩容机制.md)
   - [HashCode的作用](面试题/HashCode的作用.md)
   - [HashMap和HashTable的区别](面试题/HashMap和HashTable的区别.md)
+  
+- **工具类**
+  - [Java实现邮件发送](工具类/Java发送邮件/java_email_util.md)
 
 - **赞赏**
