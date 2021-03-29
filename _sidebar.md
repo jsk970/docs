@@ -1,11 +1,14 @@
 <!-- docs/_sidebar.md -->
 - [**总览**](README.md)
 
+- **Java基础**
+  - [Java注解](Java/Java基础/Java注解/README.md)
+  - [线程](Java/线程/README.md)
+  
 
-- **Java**
+- **JVM**
   - [Jvm 内存管理](Java/jvm/java内存管理/jvm内存管理机制.md)
   - [类加载机制](Java/类加载/类加载.md)
-  - [线程](Java/线程/README.md)
 
 
 - **持久层框架**
