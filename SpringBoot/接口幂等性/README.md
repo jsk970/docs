@@ -40,7 +40,7 @@
 
 ## 实现幂等性的方案
 
-### 方案一
+### 方案一：数据库唯一主键
 
 **方案描述**
 
@@ -174,7 +174,7 @@ UPDATE my_table SET price=price+50,version=version+1 WHERE id=1 AND version=5
 
 > 上面步骤中插入数据到 Redis 一定要设置过期时间。这样能保证在这个时间范围内，如果重复调用接口，则能够进行判断识别。如果不设置过期时间，很可能导致数据无限量的存入 Redis，致使 Redis 不能正常工作。
 
-# 方案总结
+### 方案总结
 
 | 方案名称        | 适用方法                   | 实现复杂度 | 方案缺点                                                     |
 | :-------------- | :------------------------- | :--------- | :----------------------------------------------------------- |
@@ -182,3 +182,313 @@ UPDATE my_table SET price=price+50,version=version+1 WHERE id=1 AND version=5
 | 数据库乐观锁    | 更新操作                   | 简单       | - 只能用于更新操作；- 表中需要额外添加字段；                 |
 | 请求序列号      | 插入操作 更新操作 删除操作 | 简单       | - 需要保证下游生成唯一序列号；- 需要 Redis 第三方存储已经请求的序列号； |
 | 防重 Token 令牌 | 插入操作 更新操作 删除操作 | 适中       | - 需要 Redis 第三方存储生成的 Token 串；                     |
+
+## 实现接口幂等示例
+
+这里使用防重 Token 令牌方案，该方案能保证在不同请求动作下的幂等性，实现逻辑可以看上面写的”防重 Token 令牌”方案，接下来写下实现这个逻辑的代码。
+
+### 1、Maven 引入相关依赖
+
+这里使用 Maven 工具管理依赖，这里在 pom.xml 中引入 SpringBoot、Redis、lombok 相关依赖。
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.4.RELEASE</version>
+    </parent>
+
+    <groupId>mydlq.club</groupId>
+    <artifactId>springboot-idempotent-token</artifactId>
+    <version>0.0.1</version>
+    <name>springboot-idempotent-token</name>
+    <description>Idempotent Demo</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+        <!--springboot web-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!--springboot data redis-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+        <!--lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+```
+
+### 2、配置连接 Redis 的参数
+
+在 application 配置文件中配置连接 Redis 的参数。Spring Boot 基础就不介绍了，最新教程推荐看下面的教程。
+
+https://github.com/javastacks/spring-boot-best-practice
+
+如下：
+
+```yaml
+spring:
+  redis:
+    ssl: false
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    timeout: 1000
+    password:
+    lettuce:
+      pool:
+        max-active: 100
+        max-wait: -1
+        min-idle: 0
+        max-idle: 20
+```
+
+### 3、创建与验证 Token 工具类
+
+创建用于操作 Token 相关的 Service 类，里面存在 Token 创建与验证方法，其中：
+
+- **Token 创建方法：** 使用 UUID 工具创建 Token 串，设置以 “idempotent_token:“+“Token串” 作为 Key，以用户信息当成 Value，将信息存入 Redis 中。
+- **Token 验证方法：** 接收 Token 串参数，加上 Key 前缀形成 Key，再传入 value 值，执行 Lua 表达式（Lua 表达式能保证命令执行的原子性）进行查找对应 Key 与删除操作。执行完成后验证命令的返回结果，如果结果不为空且非0，则验证成功，否则失败。
+
+```java
+import java.util.Arrays;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.core.script.RedisScript;
+import org.springframework.stereotype.Service;
+
+@Slf4j
+@Service
+public class TokenUtilService {
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
+    /**
+     * 存入 Redis 的 Token 键的前缀
+     */
+    private static final String IDEMPOTENT_TOKEN_PREFIX = "idempotent_token:";
+
+    /**
+     * 创建 Token 存入 Redis，并返回该 Token
+     *
+     * @param value 用于辅助验证的 value 值
+     * @return 生成的 Token 串
+     */
+    public String generateToken(String value) {
+        // 实例化生成 ID 工具对象
+        String token = UUID.randomUUID().toString();
+        // 设置存入 Redis 的 Key
+        String key = IDEMPOTENT_TOKEN_PREFIX + token;
+        // 存储 Token 到 Redis，且设置过期时间为5分钟
+        redisTemplate.opsForValue().set(key, value, 5, TimeUnit.MINUTES);
+        // 返回 Token
+        return token;
+    }
+
+    /**
+     * 验证 Token 正确性
+     *
+     * @param token token 字符串
+     * @param value value 存储在Redis中的辅助验证信息
+     * @return 验证结果
+     */
+    public boolean validToken(String token, String value) {
+        // 设置 Lua 脚本，其中 KEYS[1] 是 key，KEYS[2] 是 value
+        String script = "if redis.call('get', KEYS[1]) == KEYS[2] then return redis.call('del', KEYS[1]) else return 0 end";
+        RedisScript<Long> redisScript = new DefaultRedisScript<>(script, Long.class);
+        // 根据 Key 前缀拼接 Key
+        String key = IDEMPOTENT_TOKEN_PREFIX + token;
+        // 执行 Lua 脚本
+        Long result = redisTemplate.execute(redisScript, Arrays.asList(key, value));
+        // 根据返回结果判断是否成功成功匹配并删除 Redis 键值对，若果结果不为空和0，则验证通过
+        if (result != null && result != 0L) {
+            log.info("验证 token={},key={},value={} 成功", token, key, value);
+            return true;
+        }
+        log.info("验证 token={},key={},value={} 失败", token, key, value);
+        return false;
+    }
+
+}
+```
+
+### 4、创建测试的 Controller 类
+
+创建用于测试的 Controller 类，里面有获取 Token 与测试接口幂等性的接口，内容如下：
+
+```java
+import lombok.extern.slf4j.Slf4j;
+import mydlq.club.example.service.TokenUtilService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@Slf4j
+@RestController
+public class TokenController {
+
+    @Autowired
+    private TokenUtilService tokenService;
+
+    /**
+     * 获取 Token 接口
+     *
+     * @return Token 串
+     */
+    @GetMapping("/token")
+    public String getToken() {
+        // 获取用户信息（这里使用模拟数据）
+        // 注：这里存储该内容只是举例，其作用为辅助验证，使其验证逻辑更安全，如这里存储用户信息，其目的为:
+        // - 1)、使用"token"验证 Redis 中是否存在对应的 Key
+        // - 2)、使用"用户信息"验证 Redis 的 Value 是否匹配。
+        String userInfo = "mydlq";
+        // 获取 Token 字符串，并返回
+        return tokenService.generateToken(userInfo);
+    }
+
+    /**
+     * 接口幂等性测试接口
+     *
+     * @param token 幂等 Token 串
+     * @return 执行结果
+     */
+    @PostMapping("/test")
+    public String test(@RequestHeader(value = "token") String token) {
+        // 获取用户信息（这里使用模拟数据）
+        String userInfo = "mydlq";
+        // 根据 Token 和与用户相关的信息到 Redis 验证是否存在对应的信息
+        boolean result = tokenService.validToken(token, userInfo);
+        // 根据验证结果响应不同信息
+        return result ? "正常调用" : "重复调用";
+    }
+
+}
+```
+
+### 5、创建 SpringBoot 启动类
+
+创建启动类，用于启动 SpringBoot 应用。基础教程就不介绍了，建议看下下面的教程，很全了。
+
+https://github.com/javastacks/spring-boot-best-practice
+
+```java
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+
+}
+```
+
+### 6、写测试类进行测试
+
+写个测试类进行测试，多次访问同一个接口，测试是否只有第一次能否执行成功。
+
+```java
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+@Slf4j
+@SpringBootTest
+@RunWith(SpringRunner.class)
+public class IdempotenceTest {
+
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
+    @Test
+    public void interfaceIdempotenceTest() throws Exception {
+        // 初始化 MockMvc
+        MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        // 调用获取 Token 接口
+        String token = mockMvc.perform(MockMvcRequestBuilders.get("/token")
+                .accept(MediaType.TEXT_HTML))
+                .andReturn()
+                .getResponse().getContentAsString();
+        log.info("获取的 Token 串：{}", token);
+        // 循环调用 5 次进行测试
+        for (int i = 1; i <= 5; i++) {
+            log.info("第{}次调用测试接口", i);
+            // 调用验证接口并打印结果
+            String result = mockMvc.perform(MockMvcRequestBuilders.post("/test")
+                    .header("token", token)
+                    .accept(MediaType.TEXT_HTML))
+                    .andReturn().getResponse().getContentAsString();
+            log.info(result);
+            // 结果断言
+            if (i == 0) {
+                Assert.assertEquals(result, "正常调用");
+            } else {
+                Assert.assertEquals(result, "重复调用");
+            }
+        }
+    }
+
+}
+```
+
+这篇《[Spring Boot 单元测试详解+实战教程](http://mp.weixin.qq.com/s?__biz=MzI3ODcxMzQzMw==&mid=2247486167&idx=2&sn=83ca604b6154250f78f4ab3ef32f498c&chksm=eb538fe1dc2406f76848526c5b843cffb163902879a500f3b3e6acd5c3dc04f2e911db77b426&scene=21#wechat_redirect)》推荐看下。另外，关注公众号Java技术栈，在后台回复：boot，可以获取我整理的 Spring Boot 系列面试题和答案，非常齐全。
+
+显示如下：
+
+```
+[main] IdempotenceTest:  获取的 Token 串：980ea707-ce2e-456e-a059-0a03332110b4
+[main] IdempotenceTest:  第1次调用测试接口
+[main] IdempotenceTest:  正常调用
+[main] IdempotenceTest:  第2次调用测试接口
+[main] IdempotenceTest:  重复调用
+[main] IdempotenceTest:  第3次调用测试接口
+[main] IdempotenceTest:  重复调用
+[main] IdempotenceTest:  第4次调用测试接口
+[main] IdempotenceTest:  重复调用
+[main] IdempotenceTest:  第5次调用测试接口
+[main] IdempotenceTest:  重复调用
+```
