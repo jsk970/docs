@@ -8,6 +8,7 @@
 ## JVM
 - [Jvm 内存管理](Java/jvm/java内存管理/jvm内存管理机制.md)
 - [类加载机制](Java/类加载/类加载.md)
+- [Java 应用排障](Java/jvm/排查java应用命令/README.md)
 
 
 ## 持久层框架
