@@ -30,6 +30,7 @@
 ## Spring Boot
 - [Spring Boot自定义全局异常](SpringBoot/Springboot自定义全局异常/README.md)
 - [Spring Boot全注解](SpringBoot/SpringBoot全注解/README.md)
+- [Spring Boot 启动时，让方法自动执行的5种方法](SpringBoot/SpringBoot启动时,让方法执行的5种方法/README.md)
 
 ## Spring cloud
 - [Eureka](SpringCloud/eureka/eureka.md)
