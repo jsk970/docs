@@ -73,10 +73,74 @@ public class Student extends Person {
 }
 ```
 
+## 注解的处理
+
+### 反射获取注解
+
+#### 反射
+```Java
+//获取该类
+Class<?> clz = object.getClass();
+Class stuClass = Class.forName("pojos.Student");
+// 获取实体类的所有属性，返回Field数组
+Field[] fields = clz.getDeclaredFields();
+//获取类中的方法
+Method[] method=clazz.getDeclaredMethods();
+//获取类的构造方法
+Constructor[] constructor=clazz.getDeclaredConstructors();
+```
 
 
+Java提供的使用反射API读取Annotation的方法包括：
 
+判断某个注解是否存在于Class（类）、Field（字段）、Method（方法）或Constructor（构造器）：
+```java
+Class.isAnnotationPresent(Class)
+Field.isAnnotationPresent(Class)
+Method.isAnnotationPresent(Class)
+Constructor.isAnnotationPresent(Class)
 
+```
+
+### 自定义注解+AOP 
+- @annotation表示这个切点切到一个注解
+
+```java
+@Component
+@Aspect // 1.表明这是一个切面类
+public class MyLogAspect {
+
+    // 2. PointCut表示这是一个切点，@annotation表示这个切点切到一个注解上，后面带该注解的全类名
+    // 切面最主要的就是切点，所有的故事都围绕切点发生
+    // logPointCut()代表切点名称
+    @Pointcut("@annotation(me.zebin.demo.annotationdemo.aoplog.MyLog)")
+    public void logPointCut(){};
+
+    // 3. 环绕通知
+    @Around("logPointCut()")
+    public void logAround(ProceedingJoinPoint joinPoint){
+        // 获取方法名称
+        String methodName = joinPoint.getSignature().getName();
+        // 获取入参
+        Object[] param = joinPoint.getArgs();
+
+        StringBuilder sb = new StringBuilder();
+        for(Object o : param){
+            sb.append(o + "; ");
+        }
+        System.out.println("进入[" + methodName + "]方法,参数为:" + sb.toString());
+
+        // 继续执行方法
+        try {
+            joinPoint.proceed();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+        System.out.println(methodName + "方法执行结束");
+
+    }
+}
+```
 
 
 
