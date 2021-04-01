@@ -33,6 +33,7 @@
   - [Spring Boot自定义全局异常](SpringBoot/SpringBoot自定义全局异常/README.md)
   - [Spring Boot全注解](SpringBoot/SpringBoot全注解/README.md)
   - [Spring Boot启动时，让方法自动执行的5种方法](SpringBoot/SpringBoot启动时,让方法执行的5种方法/README.md)
+  - [接口幂等性校验实现方案](SpringBoot/接口幂等性/README.md)
 
 
 - **Spring Cloud**
