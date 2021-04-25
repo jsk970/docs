@@ -195,6 +195,7 @@ show keys from `表名`;
 --删除
 alter table `表名` drop index 索引名;
 ```
+
 注:MySQl的客户端工具也可以进索引的创建、查询和删除，如 Navicat Premium!
 
 ## 查看索引使用情况
@@ -202,12 +203,14 @@ alter table `表名` drop index 索引名;
 ```sql
 show status like 'Handler_read%';
 ```
+
 >handler_read_key:这个值越高越好，越高表示使用索引查询到的次数
 >handler_read_rnd_next:这个值越高，说明查询低效
 
 ## 常见索引失效的情况：
 创建一个students表：
 其中stud_id为主键！
+
 ```sql
 DROP TABLE IF EXISTS `students`;
 CREATE TABLE `students` (
@@ -227,12 +230,15 @@ INSERT INTO `learn_mybatis`.`students` (`stud_id`, `name`, `email`, `phone`, `cr
 
 1. 在where后使用or，导致索引失效（尽量少用or）
    简单实例演示：
-   创建两个普通索引，
+   创建两个普通索引
+
 ```sql
 CREATE INDEX index_name_email ON students(email);
 CREATE INDEX index_name_phone ON students(phone);
 ```
+
 使用下面查询sql，
+
 ```sql
 -- 使用了索引
 EXPLAIN select * from students where stud_id='1'  or phone='18729902095'
@@ -248,6 +254,7 @@ EXPLAIN select * from students where stud_id='1'  or phone='222' or email='74298
 > 在1的基础上，还是使用 index_name_email 索引。
 
 使用下面查询sql
+
 ```sql
 -- 使用了index_name_email索引
 EXPLAIN select * from students where email like '742981086@qq.com%';
@@ -261,10 +268,13 @@ EXPLAIN select * from students where email like '%742981086@qq.com%';
 > 删除1的基础创建的 index_name_email 和 index_name_phone 索引。
 
 重新创建一个复合索引：
+
 ```sql
 create index index_email_phone on students(email,phone);
 ```
+
 使用下面查询sql
+
 ```sql
 -- 使用了 index_email_phone 索引
 EXPLAIN select * from students where email='742981086@qq.com' and  phone='18729902095'
@@ -278,6 +288,7 @@ EXPLAIN select * from students where phone='18729902095' and name='admin'
 
 4. 如果列类型是字符串，那一定要在条件中将数据使用引号引用起来,否则不使用索引
    给name创建一个索引！
+
 ```sql
 CREATE INDEX index_name ON students(name);
 -- 使用索引
@@ -287,6 +298,7 @@ EXPLAIN select * from students where name=110
 ```
 
 5. 使用in导致索引失效
+
 ```sql
 -- 使用索引
 EXPLAIN select * from students where name='admin'
@@ -296,6 +308,7 @@ EXPLAIN SELECT * from students where name in ('admin')
 
 6. DATE_FORMAT()格式化时间，格式化后的时间再去比较，可能会导致索引失效。
    删除 students 上的创建的索引！重新在create_date创建一个索引！
+
 ```sql
 CREATE INDEX index_create_date ON students(create_date);
 -- 使用索引
@@ -344,22 +357,4 @@ EXPLAIN SELECT * from students where DATE_FORMAT(create_date,'%Y-%m-%d') >= '201
    然后 select * from test where round(id)=10; 这时函数索引起作用了
 
 - 13.不使用NOT IN和<>操作
-  
   NOT IN和<>操作都不会使用索引将进行全表扫描。NOT IN可以NOT EXISTS代替，id<>3则可使用id>3 or id<3来代替
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
