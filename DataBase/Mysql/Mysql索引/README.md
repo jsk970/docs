@@ -184,7 +184,6 @@ CREATE FULLTEXT INDEX index_fulltext_content ON table_name(col_name)
 注意： 默认 MySQL 不支持中文全文检索！
 
 MySQL 全文搜索只是一个临时方案，对于全文搜索场景，更专业的做法是使用全文搜索引擎，例如 ElasticSearch 或 Solr。
-
 索引的查询和删除
 
 ```sql
@@ -208,8 +207,7 @@ show status like 'Handler_read%';
 >handler_read_rnd_next:这个值越高，说明查询低效
 
 ## 常见索引失效的情况：
-创建一个students表：
-其中stud_id为主键！
+创建一个students表： 其中stud_id为主键！
 
 ```sql
 DROP TABLE IF EXISTS `students`;
@@ -228,16 +226,14 @@ INSERT INTO `learn_mybatis`.`students` (`stud_id`, `name`, `email`, `phone`, `cr
 
 使用 explain 查看 索引是否生效！
 
-1. 在where后使用or，导致索引失效（尽量少用or）
-   简单实例演示：
-   创建两个普通索引
+1. 在where后使用or，导致索引失效（尽量少用or） 简单实例演示： 创建两个普通索引
 
 ```sql
 CREATE INDEX index_name_email ON students(email);
 CREATE INDEX index_name_phone ON students(phone);
 ```
 
-使用下面查询sql，
+使用下面查询sql
 
 ```sql
 -- 使用了索引
@@ -357,4 +353,4 @@ EXPLAIN SELECT * from students where DATE_FORMAT(create_date,'%Y-%m-%d') >= '201
    然后 select * from test where round(id)=10; 这时函数索引起作用了
 
 - 13.不使用NOT IN和<>操作
-  NOT IN和<>操作都不会使用索引将进行全表扫描。NOT IN可以NOT EXISTS代替，id<>3则可使用id>3 or id<3来代替
+   - NOT IN和<>操作都不会使用索引将进行全表扫描。NOT IN可以NOT EXISTS代替，id<>3则可使用id>3 or id<3来代替
