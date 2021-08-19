@@ -12,10 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author solin.jiang
- * @Description
- * @create 2020-12-02 14:20
- *
- * 自定义异常类
+ * 2020-12-02 14:20
+ * 自定义异常
  */
 @Data
 public class LearningException extends RuntimeException {
@@ -59,10 +57,10 @@ import java.util.Locale;
 
 /**
  * @author solin.jiang
- * @Description
- * @create 2020-12-02 14:15
- *
  * 全局异常处理
+ * 2020-12-02 14:15
+ *
+ * 
  *
  * SpringBoot中有一个@ControllerAdvice的注解，使用该注解表示开启了全局异常的捕获，
  * 只需在自定义一个方法使用@ExceptionHandler注解然后定义捕获异常的类型即可对这些捕获的异常进行统一的处理。
@@ -85,7 +83,7 @@ public class BaseExceptionHandler {
     /**
      * 处理自定义的业务异常
      * @param e
-     * @return
+     * @return ResultVo
      */
     @ExceptionHandler(value = LearningException.class)
     public ResultVo LearningExceptionHandler(LearningException e){
