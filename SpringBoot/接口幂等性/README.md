@@ -59,7 +59,7 @@
 
 **主要流程：**
 
-![](/Users/jiangshaokang/IdeaProjects/docs/SpringBoot/接口幂等性/数据库唯一主键.webp)
+![](/SpringBoot/接口幂等性/数据库唯一主键.webp)
 
 主要流程：
 
@@ -128,7 +128,7 @@ UPDATE my_table SET price=price+50,version=version+1 WHERE id=1 AND version=5
 
 **主要流程：**
 
-![](/Users/jiangshaokang/IdeaProjects/docs/SpringBoot/接口幂等性/防重Token令牌.png)
+![](/SpringBoot/接口幂等性/防重Token令牌.png)
 
 - ① 服务端提供获取 Token 的接口，该 Token 可以是一个序列号，也可以是一个分布式 ID 或者 UUID 串。
 - ② 客户端调用接口获取 Token，这时候服务端会生成一个 Token 串。
@@ -164,7 +164,7 @@ UPDATE my_table SET price=price+50,version=version+1 WHERE id=1 AND version=5
 
 **主要流程：**
 
-![](/Users/jiangshaokang/IdeaProjects/docs/SpringBoot/接口幂等性/下游传递唯一序列号.png)
+![](/SpringBoot/接口幂等性/下游传递唯一序列号.png)
 
 主要步骤：
 
