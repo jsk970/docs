@@ -474,9 +474,6 @@ public class IdempotenceTest {
 
 }
 ```
-
-这篇《[Spring Boot 单元测试详解+实战教程](http://mp.weixin.qq.com/s?__biz=MzI3ODcxMzQzMw==&mid=2247486167&idx=2&sn=83ca604b6154250f78f4ab3ef32f498c&chksm=eb538fe1dc2406f76848526c5b843cffb163902879a500f3b3e6acd5c3dc04f2e911db77b426&scene=21#wechat_redirect)》推荐看下。另外，关注公众号Java技术栈，在后台回复：boot，可以获取我整理的 Spring Boot 系列面试题和答案，非常齐全。
-
 显示如下：
 
 ```
