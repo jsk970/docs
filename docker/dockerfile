@@ -1,6 +1,6 @@
 FROM IP:PORT/library/openjdk:8u212-jdk-alpine
 
-MAINTAINER js_kang <js_kang@163.cn>
+MAINTAINER js_kang <js_kang@163.com>
 
 # set environment
 ENV TIME_ZONE 'Asia/Shanghai'
