@@ -63,6 +63,7 @@
   - [excel导出报错：The supplied data appears to be in the Office 2007+ XML.](排错总结/excel导出报错.md)
   - [REST出现其任何超类对此上下文都是未知的](排错总结/REST出现其任何超类对此上下文都是未知的.md)
   - [spring boot使用fastJson(解决中文乱码问题)](排错总结/springboot使用fastJson(解决中文乱码问题).md)
+  - [mybatis plus 分页查询 left join 子查询参数无法找到报错](排错总结/mybatis-plus分页插件导致的问题记录.md)
 
 
 - **项目管理工具**
