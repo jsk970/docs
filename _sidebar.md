@@ -1,5 +1,4 @@
 <!-- docs/_sidebar.md -->
-- [**总览**](README.md)
 
 - **Java基础**
   - [Java注解](Java/Java基础/Java注解/README.md)
