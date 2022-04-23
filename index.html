@@ -21,11 +21,13 @@ window.Slardar('config', {bid: 'oapi_0x5f3759df_v1_cli_a049b14f21b85013'});
       coverpage: true, // 设置封面
       onlyCover: true, // 只显示封面
       loadSidebar: true, // 设置侧边栏
-      alias: {
-        '/.*/_sidebar.md': '/_sidebar.md'
-      },
+
       subMaxLevel: 3, //侧边栏显示当前页面的目录(标题)
       loadNavbar: true, // 设置导航栏
+      alias: {
+        '/.*/_sidebar.md': '/_sidebar.md',
+        '/.*/_navbar.md': '/_navbar.md'
+      },
       // 完整配置参数
       search: {
         placeholder: '搜索', // 搜索提示框文字， 支持本地化，例子在下面
