@@ -1,4 +1,4 @@
-# Spring Cloud Stream
+# Spring Cloud Stream 消息驱动微服务框架
 ## 简介
 Spring Cloud Stream 在 Spring Cloud 体系内是一个构建消息驱动微服务的框架，
 其目的是为了简化消息在 Spring Cloud 应用程序中的开发。
