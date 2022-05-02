@@ -45,7 +45,8 @@
   - [Api GateWay](SpringCloud/apigateway/apigateway.md)
 
 - **Spring Cloud Alibaba**
-  - [Nacos-简介](springCloudAlibaba/01-Nacos简介.md)
+  - [Nacos-简介](springCloudAlibaba/01-Nacos-配置与管理微服务.md)
+  - [Spring Cloud Stream 消息驱动微服务框架](springCloudAlibaba/02-SpringCloudStream.md)
 
 
 - **分布式相关**
