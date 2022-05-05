@@ -30,7 +30,7 @@ Spring Cloud Stream支持各种binder实现
 - @StreamListener：监听队列，用于消费者的队列的消息接收。
 - @EnableBinding：将信道channel和exchange绑定在一起。
 
-[SpringCloudStream](img/SpringCloudStream.png)
+![SpringCloudStream](img/SpringCloudStream.png)
 
 ## 示例
 ### provider 服务提供者
