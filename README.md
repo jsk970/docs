@@ -1,9 +1,9 @@
 # 总览
 
 ## Java基础
-- [Java注解](Java/Java基础/Java注解/README.md)
+- [Java注解](Java/Java注解.md)
 - [线程](Java/线程/README.md)
-- [深拷贝&浅拷贝](Java/深拷贝&浅拷贝/README.md)
+- [深拷贝&浅拷贝](Java/深拷贝&浅拷贝.md)
 
 
 ## Java8新特性
@@ -26,7 +26,7 @@
 
 
 ## Linux
-- [JavaWeb环境搭建](Linux/JavaWeb环境搭建/README.md)
+- [JavaWeb环境搭建](Linux/JavaWeb环境搭建.md)
 
 
 ## Docker
