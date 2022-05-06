@@ -78,7 +78,7 @@ public class Student extends Person {
 ### 反射获取注解
 
 #### 反射
-```Java
+```
 //获取该类
 Class<?> clz = object.getClass();
 Class stuClass = Class.forName("pojos.Student");
@@ -94,12 +94,11 @@ Constructor[] constructor=clazz.getDeclaredConstructors();
 Java提供的使用反射API读取Annotation的方法包括：
 
 判断某个注解是否存在于Class（类）、Field（字段）、Method（方法）或Constructor（构造器）：
-```java
+```
 Class.isAnnotationPresent(Class)
 Field.isAnnotationPresent(Class)
 Method.isAnnotationPresent(Class)
 Constructor.isAnnotationPresent(Class)
-
 ```
 
 ### 自定义注解+AOP 

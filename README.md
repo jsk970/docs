@@ -78,7 +78,7 @@
 
 
 ## 项目管理工具
-- [maven](项目管理工具/Maven/README.md)
+- [maven](项目管理工具/maven.md)
 
 
 ## 原理知识类
