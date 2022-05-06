@@ -33,7 +33,7 @@
 
 1、pom文件中，加入依赖
 
-```xml
+```
 <!--query dsl -->
 <dependency> 
     <groupId>com.querydsl</groupId> 
@@ -113,7 +113,7 @@ public class QUser extends EntityPathBase<User> {
 
 > Controller层
 
-```java
+```
 @ApiOperation(value = "分页查询")
 @GetMapping
 public ResultVO<AllRecords<AuctionHeaderView>> auctionsQuery(AuctionQueryVo auctionQueryVo) {
@@ -129,7 +129,7 @@ public ResultVO<AllRecords<AuctionHeaderView>> auctionsQuery(AuctionQueryVo auct
 
 > service层
 
-```java
+```
 public AllRecords<AuctionHeaderView> pageAuction(AuctionQueryVo queryVo, UserInfo userInfo) {
     log.info("start-pageAuction,pageQuery = {}", queryVo);
     BooleanExpression last = Expressions.asBoolean(true).isTrue();

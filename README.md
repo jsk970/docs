@@ -27,8 +27,8 @@
 
 
 ## 持久层框架
-- [Mybatis](持久层框架/Mybatis/README.md)
-- [Spring Data Jpa](持久层框架/SpringDataJpa/README.md)
+- [Mybatis](持久层框架/Mybatis.md)
+- [Spring Data Jpa](持久层框架/SpringDataJpa.md)
 
 
 ## 中间件
