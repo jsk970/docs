@@ -10,12 +10,6 @@
 - [Java8-Stream遍历树形结构](Java8新特性/Stream/Java8_Stream_tree.md)
 
 
-
-## Java8新特性
-- [Java8-Stream遍历树形结构](Java8新特性/Stream/Java8_Stream_tree.md)
-
-
-
 ## Java8新特性
 - [Java8-Stream遍历树形结构](Java8新特性/Stream/Java8_Stream_tree.md)
 
