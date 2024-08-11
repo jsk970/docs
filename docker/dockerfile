@@ -1,0 +1,25 @@
+FROM IP:PORT/library/openjdk:8u212-jdk-alpine
+
+MAINTAINER js_kang <js_kang@163.com>
+
+# set environment
+ENV TIME_ZONE 'Asia/Shanghai'
+
+ENV SLEEP_SECOND '1s'
+
+ENV JAVA_OPTS '-server -Xms256m -Xmx512m -XX:+UseG1GC -XX:MaxGCPauseMillis=200'
+
+RUN echo "http://IP/alpine/v3.8/main" > /etc/apk/repositories \
+    && apk add --no-cache tzdata \
+    && ln -snf /usr/share/zoneinfo/$TIME_ZONE /etc/localtime \
+    && echo $TIME_ZONE > /etc/timezone
+
+VOLUME /tmp
+
+ADD test-0.0.1-SNAPSHOT.jar app.jar
+
+ENTRYPOINT echo please waitting $SLEEP_SECOND \
+				&& sleep $SLEEP_SECOND \
+				&& java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -Dserver.port=8080 -jar app.jar
+
+EXPOSE 8080
